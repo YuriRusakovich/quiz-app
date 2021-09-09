@@ -1,0 +1,21 @@
+{
+  "name": "quiz-app",
+  "version": "1.0.0",
+  "description": "quiz-app test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YuriRusakovich/quiz-app.git"
+  },
+  "author": "Yury Rusakovich",
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^4.2.0"
+  }
+}
