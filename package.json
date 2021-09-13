@@ -2,8 +2,10 @@
   "name": "quiz-app",
   "version": "1.0.0",
   "description": "quiz-app test",
-  "main": "index.js",
+  "main": "app.js",
+  "type": "module",
   "scripts": {
+    "start": "node --experimental-modules server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -12,10 +14,18 @@
   },
   "author": "Yury Rusakovich",
   "devDependencies": {
-    "nodemon": "^2.0.12"
+    "@babel/core": "^7.15.0",
+    "@babel/node": "^7.14.9",
+    "@babel/preset-env": "^7.15.0",
+    "nodemon": "^2.0.12",
+    "prettier": "^2.3.2"
   },
   "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "mongodb": "^4.1.1",
+    "mongoose": "^6.0.5",
     "socket.io": "^4.2.0"
   }
 }

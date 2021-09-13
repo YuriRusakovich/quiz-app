@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Quiz app | Host</title>
+        <link rel="stylesheet" href ="../css/index.css">
+        <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div class="page_wrapper">
+            <h2 id="title">Join this Game using the Game Pin: </h2>
+            <h1 id="gamePinText"></h1>
+            <div class="users">Users</div>
+            <hr>
+            <div id="users"></div>
+            <hr>
+            <button id="start" onclick="startGame()">Start Game</button>
+            <button id="cancel" onclick="endGame()">Cancel Game</button>
+        </div>
+    </body>
+
+    <script src="../socket.io/socket.io.js"></script>
+    <script src="../js/libs/jqueryLibrary.js"></script>
+    <script src="../js/libs/deparam.js"></script>
+    <script src= "../js/host.js"></script>
+</html>
