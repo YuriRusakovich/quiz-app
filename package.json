@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node --experimental-modules server/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "format": "prettier --write \"public/**/*.js\""
   },
   "repository": {
     "type": "git",

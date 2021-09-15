@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Quiz app | Game</title>
+        <link rel="stylesheet" href="../../css/index.css">
+        <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+    <div class="page_wrapper">
+        <h2 id="message"></h2>
+        <div class='answers'>
+            <button onclick="answerSubmitted(1)" id="answer1" class="answer_button"></button>
+            <button onclick="answerSubmitted(2)" id="answer2" class="answer_button"></button>
+            <button onclick="answerSubmitted(3)" id="answer3" class="answer_button"></button>
+            <button onclick="answerSubmitted(4)" id="answer4" class="answer_button"></button>
+        </div>
+        <br/>
+        <div class="users" id="usersTitle">Users</div>
+        <hr>
+        <div id="users"></div>
+        <hr>
+        <button id="cancel" onclick="endGame()">End Game</button>
+    </div>
+    </body>
+
+
+    <script src = "../../socket.io/socket.io.js"></script>
+    <script src = "../../js/libs/jqueryLibrary.js"></script>
+    <script src = "../../js/libs/deparam.js"></script>
+    <script src = "../../js/userGame.js"></script>
+    <script src= "../../js/services/updateUsers.js"></script>
+</html>
