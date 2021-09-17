@@ -62,7 +62,7 @@ socket.on('nextQuestionPlayer', function () {
     setAnswersEnabled();
     const images = document.getElementsByClassName('user_img');
     for (let image of images) {
-        image.style.border = '2px solid black';
+        image.style.border = '2px solid grey';
     }
 });
 
@@ -86,14 +86,14 @@ socket.on('gameData', function(data) {
 socket.on('GameOver', function () {
     document.body.style.backgroundColor = '#FFFFFF';
     document.getElementById('message').style.display = 'block';
-    document.getElementById('message').innerHTML = 'GAME OVER';
+    document.getElementById('message').innerHTML = 'Game Over';
     document.getElementById('answer1').style.display = 'none';
     document.getElementById('answer2').style.display = 'none';
     document.getElementById('answer3').style.display = 'none';
     document.getElementById('answer4').style.display = 'none';
     const images = document.getElementsByClassName('user_img');
     for (let image of images) {
-        image.style.border = '2px solid black';
+        image.style.border = '2px solid grey';
     }
     document.getElementById('cancel').style.display = 'block';
 });

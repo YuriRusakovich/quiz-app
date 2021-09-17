@@ -18,3 +18,11 @@ socket.on('gameNamesData', function (data) {
 function startGame(data) {
     window.location.href = '/host/' + '?id=' + data;
 }
+
+function createNew() {
+    window.location.href = '/create/creator';
+}
+
+function back() {
+    window.location.href = '/../';
+}

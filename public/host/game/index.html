@@ -8,15 +8,29 @@
     </head>
     <body>
         <div class="page_wrapper">
-            <h4 id="questionNum">Question 1 / x</h4>
-            <h4 id="playersAnswered">Players Answered: 0 / x</h4>
-            <h2 id="question">Question</h2>
-            <h3 id="answer1">Answer</h3>
-            <h3 id="answer2">Answer</h3>
-            <h3 id="answer3">Answer</h3>
-            <h3 id="answer4">Answer</h3>
-            <br>
+            <div id="questionWrapper" class="question_wrapper">
+                <div id="gameTitle"></div>
+                <div class="gameInfo">
+                    <div id="gameType"></div>
+                    <div id="gameLevel"></div>
+                </div>
+                <div class='questionInfo'>
+                    <div id="questionNum">Question 1 / x</div>
+                    <div id="playersAnswered">Players Answered: 0 / x</div>
+                </div>
+                <div id="question">Question</div>
+                <div id="answer1">Answer</div>
+                <div id="answer2">Answer</div>
+                <div id="answer3">Answer</div>
+                <div id="answer4">Answer</div>
+                <hr/>
+            </div>
+            <div class="users">Users</div>
+            <hr>
+            <div id="users"></div>
+            <hr>
             <button onclick="nextQuestion()" id="nextQButton">Next Question</button>
+            <button onclick="nextQuestion()" id="finishButton">Finish game</button>
             <button id="cancel" onclick="endGame()">End Game</button>
         </div>
     </body>
@@ -24,5 +38,6 @@
     <script src="../../socket.io/socket.io.js"></script>
     <script src="../../js/libs/jqueryLibrary.js"></script>
     <script src="../../js/libs/deparam.js"></script>
+    <script src="../../js/services/updateUsers.js"></script>
     <script src="../../js/hostGame.js"></script>
 </html>

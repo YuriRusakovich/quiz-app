@@ -171,8 +171,14 @@ io.on('connection', (socket) => {
                     const answer4 = res[0].questions[0].answers[3];
                     const correctAnswer = res[0].questions[0].correct;
                     const questionsLength = res[0].questions.length;
+                    const gameName = res[0].name;
+                    const gameType = res[0].type;
+                    const gameLevel = res[0].level;
 
                     socket.emit('gameQuestions', {
+                        n: gameName,
+                        t: gameType,
+                        l: gameLevel,
                         q1: question,
                         a1: answer1,
                         a2: answer2,
@@ -191,11 +197,11 @@ io.on('connection', (socket) => {
                             a3: answer3,
                             a4: answer4
                         });
+                        socket.emit('currentUsers', playerData);
                     }, 200);
                     db.close();
                 });
             });
-
             socket.to(game.pin.toString()).emit('gameStartedPlayer');
             game.gameData.questionLive = true;
         }else{
@@ -240,6 +246,9 @@ io.on('connection', (socket) => {
                         });
                         socket.to(game.pin.toString()).emit('questionOver');
                         socket.emit('questionOver');
+                        if (res[0].questions.length === game.gameData.question) {
+                            socket.to(game.pin.toString()).emit('finishGame');
+                        }
                     } else {
                         socket.to(game.pin.toString()).emit('updatePlayersAnswered', {
                             playersInGame: playerNum.length,
@@ -325,6 +334,35 @@ io.on('connection', (socket) => {
             });
         });
         socket.to(game.pin.toString()).emit('nextQuestionPlayer');
+    });
+
+    socket.on('newQuiz', function(data){
+        MongoClient.connect(url, async function(err, db){
+            if (err) {
+                throw err;
+            }
+            const dbo = db.db('api');
+            await dbo.collection('games').find({}).toArray(async function(err, result){
+                if (err) {
+                    throw err;
+                }
+                let num = Object.keys(result).length;
+                if (num === 0) {
+                    data.id = 1
+                    num = 1
+                } else {
+                    data.id = result[num-1].id + 1;
+                }
+                await dbo.collection('games').insertOne(data, function(err, res) {
+                    if (err) {
+                        throw err;
+                    }
+                    db.close();
+                });
+                db.close();
+                socket.emit('startGameFromCreator', num + 1);
+            });
+        });
     });
 
 });
