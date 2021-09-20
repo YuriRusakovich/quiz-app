@@ -5,7 +5,6 @@ let currentQuestionNum = 0;
 let correct = false;
 
 socket.on('connect', function () {
-    console.log(socket.id);
     socket.emit('host-join-game', params);
     document.getElementById('cancel').style.display = 'none';
 });

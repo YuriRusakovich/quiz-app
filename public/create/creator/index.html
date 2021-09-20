@@ -1,57 +1,103 @@
 <!DOCTYPE html>
 <html lang='en'>
-<head>
-    <title>Quiz app | New test</title>
-    <link rel="stylesheet" href="../../css/index.css">
-    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
-<div class="page_wrapper">
-    <h1 id="title">Create new game</h1>
-    <div class="form-field">
-        <label id="quizTitle">Game Title</label>
-        <input id="name" aria-label="name" type="text" name="name" autofocus/>
-    </div>
-    <div class="form-field">
-        <label id="quizType">Game Type</label>
-        <select class="select" id="type" aria-label="type" name="type">
-            <option selected value='React'>React</option>
-            <option value='JavaScript'>JavaScript</option>
-        </select>
-    </div>
-    <div class="form-field">
-        <label id="quizLevel">Game Level</label>
-        <select class="select" id="level" aria-label="level" name="level">
-            <option selected value='D1'>D1</option>
-            <option value='D2'>D2</option>
-            <option value='D3'>D3</option>
-            <option value='D4'>D4</option>
-            <option value='D5'>D5</option>
-        </select>
-    </div>
-    <div id="allQuestions">
-        <div id="question-field">
-            <label>Question 1: </label>
-            <textarea class="question" id="q1" aria-label="q1" draggable='false' autofocus></textarea>
-            <label>Answer 1: </label>
-            <input class="answer" id="1a1" aria-label="a1" type="text" autofocus/>
-            <label>Answer 2: </label>
-            <input class="answer" id="1a2" aria-label="a2" type="text" autofocus/>
-            <label>Answer 3: </label>
-            <input class="answer" id="1a3" aria-label="a3" type="text" autofocus/>
-            <label>Answer 4: </label>
-            <input class="answer" id="1a4" aria-label="a4" type="text" autofocus/>
-            <label>Correct Answer (1-4) :</label>
-            <input class="correct" min='1' max='4' aria-label="correct" id="correct1"  type="number" autofocus/>
+    <head>
+        <title>Quiz app | New test</title>
+        <link rel="stylesheet" href="../../css/index.css">
+        <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div class="page_wrapper">
+            <h1 id="title">Create new game</h1>
+            <div class="form-field">
+                <label id="quizTitle">Game Title</label>
+                <input id="name"
+                       aria-label="name"
+                       type="text"
+                       onchange="checkValidation('name')"
+                       name="name"
+                       autofocus/>
+                <div id="name_error" class="error"></div>
+            </div>
+            <div class="form-field">
+                <label id="quizType">Game Type</label>
+                <select class="select" id="type" aria-label="type" name="type">
+                    <option selected value='React'>React</option>
+                    <option value='JavaScript'>JavaScript</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label id="quizLevel">Game Level</label>
+                <select class="select" id="level" aria-label="level" name="level">
+                    <option selected value='D1'>D1</option>
+                    <option value='D2'>D2</option>
+                    <option value='D3'>D3</option>
+                    <option value='D4'>D4</option>
+                    <option value='D5'>D5</option>
+                </select>
+            </div>
+            <div id="allQuestions">
+                <div id="question-field">
+                    <label>Question 1: </label>
+                    <textarea class="question"
+                              id="q1"
+                              aria-label="q1"
+                              onchange="checkValidation('q1')"
+                              draggable='false'
+                              autofocus></textarea>
+                    <div id="q1_error" class="error"></div>
+                    <label>Answer 1: </label>
+                    <input class="answer"
+                           id="1a1"
+                           aria-label="a1"
+                           onchange="checkValidation('1a1')"
+                           type="text"
+                           autofocus/>
+                    <div id="1a1_error" class="error"></div>
+                    <label>Answer 2: </label>
+                    <input class="answer"
+                           id="1a2"
+                           aria-label="a2"
+                           onchange="checkValidation('1a2')"
+                           type="text"
+                           autofocus/>
+                    <div id="1a2_error" class="error"></div>
+                    <label>Answer 3: </label>
+                    <input class="answer"
+                           id="1a3"
+                           aria-label="a3"
+                           onchange="checkValidation('1a3')"
+                           type="text"
+                           autofocus/>
+                    <div id="1a3_error" class="error"></div>
+                    <label>Answer 4: </label>
+                    <input class="answer"
+                           id="1a4"
+                           aria-label="a4"
+                           onchange="checkValidation('1a4')"
+                           type="text"
+                           autofocus/>
+                    <div id="1a4_error" class="error"></div>
+                    <label>Correct Answer (1-4) :</label>
+                    <input class="correct"
+                           min='1' max='4'
+                           aria-label="correct"
+                           onchange="checkValidation('correct1')"
+                           id="correct1"
+                           type="number"
+                           autofocus/>
+                    <div id="correct1_error" class="error"></div>
+                    <div id="correct1_errorNumber" class="error"></div>
+                </div>
+            </div>
+            <button onclick="addQuestion()" class="button">Add another question</button>
+            <button onclick="updateDatabase()" class="button">Create game</button>
+            <button onclick="cancelGame()" class="button">Cancel and return to game selection</button>
         </div>
-    </div>
-    <button onclick="addQuestion()" class="button">Add another question</button>
-    <button onclick="updateDatabase()" class="button">Create game</button>
-    <button onclick="cancelGame()" class="button">Cancel and return to game selection</button>
-</div>
-</body>
+    </body>
 
-<script src="../../socket.io/socket.io.js"></script>
-<script src="../../js/creator.js"></script>
+    <script src="../../socket.io/socket.io.js"></script>
+    <script src="../../js/creator.js"></script>
+    <script src="../../js/services/validation.js"></script>
+    <script src="../../js/services/questions.js"></script>
 </html>

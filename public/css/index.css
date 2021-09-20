@@ -174,3 +174,9 @@
     width: 350px;
     justify-content: space-between;
 }
+
+.error {
+    display: none;
+    color: red;
+    margin-bottom: 10px;
+}

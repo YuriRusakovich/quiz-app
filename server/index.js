@@ -30,10 +30,12 @@ io.on('connection', (socket) => {
         MongoClient.connect(url, function(err, db){
             if (err) throw err;
             let dbo = db.db('api');
-            dbo.collection("games").find().toArray(function(err, res) {
-                if (err) throw err;
+            dbo.collection("games").find().toArray(async function(err, res) {
+                if (err) {
+                    throw err;
+                }
                 socket.emit('gameNamesData', res);
-                db.close();
+                await db.close();
             });
         });
     });
@@ -47,13 +49,13 @@ io.on('connection', (socket) => {
             const query = { id: parseInt(data.id) };
             dbo.collection('games')
                 .find(query)
-                .toArray(function(err, result){
+                .toArray(async function(err, result){
                 if (err) {
                     throw err;
                 }
                 if (result[0] !== undefined) {
                     const gamePin = Math.floor(Math.random() * 90000) + 10000;
-                    games.addGame(gamePin, socket.id, false, {playersAnswered: 0, questionLive: false, gameid: data.id, question: 1});
+                    games.addGame(gamePin, socket.id, false, {playersAnswered: 0, questionLive: false, gameId: data.id, question: 1});
                     const game = games.getGame(socket.id);
                     socket.join(game.pin.toString());
                     socket.emit('showGamePin', {
@@ -62,7 +64,7 @@ io.on('connection', (socket) => {
                 } else {
                     socket.emit('noGameFound');
                 }
-                db.close();
+                await db.close();
             });
         });
     });
@@ -152,54 +154,19 @@ io.on('connection', (socket) => {
                     users.users[i].hostId = socket.id;
                 }
             }
-            const gameid = game.gameData['gameid'];
+            const gameId = game.gameData['gameId'];
             MongoClient.connect(url, function(err, db){
                 if (err) {
                     throw err;
                 }
                 const dbo = db.db('api');
-                const query = { id: parseInt(gameid) };
-                dbo.collection("games").find(query).toArray(function(err, res) {
+                const query = { id: parseInt(gameId) };
+                dbo.collection("games").find(query).toArray(async function(err, res) {
                     if (err) {
                         throw err;
                     }
-
-                    const question = res[0].questions[0].question;
-                    const answer1 = res[0].questions[0].answers[0];
-                    const answer2 = res[0].questions[0].answers[1];
-                    const answer3 = res[0].questions[0].answers[2];
-                    const answer4 = res[0].questions[0].answers[3];
-                    const correctAnswer = res[0].questions[0].correct;
-                    const questionsLength = res[0].questions.length;
-                    const gameName = res[0].name;
-                    const gameType = res[0].type;
-                    const gameLevel = res[0].level;
-
-                    socket.emit('gameQuestions', {
-                        n: gameName,
-                        t: gameType,
-                        l: gameLevel,
-                        q1: question,
-                        a1: answer1,
-                        a2: answer2,
-                        a3: answer3,
-                        a4: answer4,
-                        correct: correctAnswer,
-                        playersInGame: playerData.length,
-                        questionsLength: questionsLength,
-                        currentQuestionNum: game.gameData.question
-                    });
-                    setTimeout(() => {
-                        socket.to(game.pin.toString()).emit('gameData', {
-                            q1: question,
-                            a1: answer1,
-                            a2: answer2,
-                            a3: answer3,
-                            a4: answer4
-                        });
-                        socket.emit('currentUsers', playerData);
-                    }, 200);
-                    db.close();
+                    prepareQuestion(socket, game, res, playerData)
+                    await db.close();
                 });
             });
             socket.to(game.pin.toString()).emit('gameStartedPlayer');
@@ -219,7 +186,7 @@ io.on('connection', (socket) => {
             game.gameData.playersAnswered += 1;
 
             const gameQuestion = game.gameData.question;
-            const gameid = game.gameData.gameid;
+            const gameId = game.gameData.gameId;
 
             MongoClient.connect(url, function(err, db){
                 if (err) {
@@ -227,8 +194,8 @@ io.on('connection', (socket) => {
                 }
 
                 const dbo = db.db('api');
-                const query = { id: parseInt(gameid) };
-                dbo.collection("games").find(query).toArray(function(err, res) {
+                const query = { id: parseInt(gameId) };
+                dbo.collection("games").find(query).toArray(async function(err, res) {
                     if (err) {
                         throw err;
                     }
@@ -256,7 +223,7 @@ io.on('connection', (socket) => {
                         });
                     }
 
-                    db.close();
+                    await db.close();
                 });
             });
         }
@@ -282,51 +249,22 @@ io.on('connection', (socket) => {
         game.gameData.playersAnswered = 0;
         game.gameData.questionLive = true;
         game.gameData.question += 1;
-        const gameid = game.gameData.gameid;
+        const gameId = game.gameData.gameId;
 
         MongoClient.connect(url, function(err, db) {
             if (err) {
                 throw err;
             }
             const dbo = db.db('api');
-            const query = { id: parseInt(gameid) };
-            dbo.collection("games").find(query).toArray(function(err, res) {
+            const query = { id: parseInt(gameId) };
+            dbo.collection("games").find(query).toArray(async function(err, res) {
                 if (err) {
                     throw err;
                 }
 
                 if (res[0].questions.length >= game.gameData.question) {
-                    let questionNum = game.gameData.question;
-                    questionNum = questionNum - 1;
-                    const question = res[0].questions[questionNum].question;
-                    const answer1 = res[0].questions[questionNum].answers[0];
-                    const answer2 = res[0].questions[questionNum].answers[1];
-                    const answer3 = res[0].questions[questionNum].answers[2];
-                    const answer4 = res[0].questions[questionNum].answers[3];
-                    const correctAnswer = res[0].questions[questionNum].correct;
-                    const questionsLength = res[0].questions.length;
-
-                    socket.emit('gameQuestions', {
-                        q1: question,
-                        a1: answer1,
-                        a2: answer2,
-                        a3: answer3,
-                        a4: answer4,
-                        correct: correctAnswer,
-                        playersInGame: playerData.length,
-                        questionsLength: questionsLength,
-                        currentQuestionNum: game.gameData.question
-                    });
-                    setTimeout(() => {
-                        socket.to(game.pin.toString()).emit('gameData', {
-                            q1: question,
-                            a1: answer1,
-                            a2: answer2,
-                            a3: answer3,
-                            a4: answer4
-                        });
-                    }, 200);
-                    db.close();
+                    prepareQuestion(socket, game, res, playerData);
+                    await db.close();
                 } else {
                     socket.to(game.pin.toString()).emit('GameOver');
                     socket.emit('GameOver');
@@ -353,13 +291,13 @@ io.on('connection', (socket) => {
                 } else {
                     data.id = result[num-1].id + 1;
                 }
-                await dbo.collection('games').insertOne(data, function(err, res) {
+                await dbo.collection('games').insertOne(data, function(err) {
                     if (err) {
                         throw err;
                     }
                     db.close();
                 });
-                db.close();
+                await db.close();
                 socket.emit('startGameFromCreator', num + 1);
             });
         });
@@ -367,3 +305,42 @@ io.on('connection', (socket) => {
 
 });
 
+function prepareQuestion(socket, game, res, playerData) {
+    let questionNum = game.gameData.question;
+    questionNum = questionNum - 1;
+    const question = res[0].questions[questionNum].question;
+    const answer1 = res[0].questions[questionNum].answers[0];
+    const answer2 = res[0].questions[questionNum].answers[1];
+    const answer3 = res[0].questions[questionNum].answers[2];
+    const answer4 = res[0].questions[questionNum].answers[3];
+    const correctAnswer = res[0].questions[questionNum].correct;
+    const questionsLength = res[0].questions.length;
+    const gameName = res[0].name;
+    const gameType = res[0].type;
+    const gameLevel = res[0].level;
+
+    socket.emit('gameQuestions', {
+        n: gameName,
+        t: gameType,
+        l: gameLevel,
+        q1: question,
+        a1: answer1,
+        a2: answer2,
+        a3: answer3,
+        a4: answer4,
+        correct: correctAnswer,
+        playersInGame: playerData.length,
+        questionsLength: questionsLength,
+        currentQuestionNum: game.gameData.question
+    });
+    setTimeout(() => {
+        socket.to(game.pin.toString()).emit('gameData', {
+            q1: question,
+            a1: answer1,
+            a2: answer2,
+            a3: answer3,
+            a4: answer4
+        });
+        socket.emit('currentUsers', playerData);
+    }, 200);
+}
