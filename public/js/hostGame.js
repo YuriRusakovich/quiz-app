@@ -7,6 +7,7 @@ let correct = false;
 socket.on('connect', function () {
     socket.emit('host-join-game', params);
     document.getElementById('cancel').style.display = 'none';
+    document.getElementById('saveResult').style.display = 'none';
 });
 
 socket.on('noGameFound', function () {
@@ -52,6 +53,7 @@ function nextQuestion() {
 socket.on('GameOver', function () {
     document.getElementById('nextQButton').style.display = 'none';
     document.getElementById('finishButton').style.display = 'none';
+    document.getElementById('saveResult').style.display = 'block';
     document.getElementById('cancel').style.display = 'block';
     const h2 = document.createElement('h2');
     h2.innerHTML = 'Game Over';
@@ -77,5 +79,10 @@ socket.on('finishGame', function() {
 
 function endGame() {
     window.location.href = '/';
+}
+
+function saveResults() {
+    socket.emit('saveResults');
+    document.getElementById('saveResult').style.display = 'none';
 }
 

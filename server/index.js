@@ -303,6 +303,72 @@ io.on('connection', (socket) => {
         });
     });
 
+    socket.on('saveResults', async function() {
+        const data = {};
+        data.date = new Date();
+        data.users = [];
+        const game = games.getGame(socket.id);
+        const players = users.getUsers(socket.id);
+        for (let user of players) {
+            data.users.push({
+                name: user.name,
+                score: user.gameData.score
+            })
+        }
+
+        await MongoClient.connect(url, async function(err, db){
+            if (err) {
+                throw err;
+            }
+            const dbo = db.db('api');
+            const query = { id: parseInt(game.gameData.gameId) };
+            await dbo.collection("games").find(query).toArray(async function(err, res) {
+                if (err) {
+                    throw err;
+                }
+                data.name = res[0].name;
+                data.type = res[0].type;
+                data.level = res[0].level;
+                await db.close();
+            });
+        });
+
+        MongoClient.connect(url, async function(err, db){
+            if (err) {
+                throw err;
+            }
+            const dbo = db.db('api');
+            dbo.collection('results').find({}).toArray(async function(err){
+                if (err) {
+                    throw err;
+                }
+                await dbo.collection('results').insertOne(data, async function(err) {
+                    if (err) {
+                        throw err;
+                    }
+                    await db.close();
+                });
+                await db.close();
+            });
+        });
+    });
+
+    socket.on('getResults', async function() {
+        MongoClient.connect(url, async function(err, db){
+            if (err) {
+                throw err;
+            }
+            const dbo = db.db('api');
+            await dbo.collection("results").find({}).sort({date: -1}) .toArray(async function(err, res) {
+                if (err) {
+                    throw err;
+                }
+                socket.emit('resultsData', res);
+                await db.close();
+            });
+        });
+    });
+
 });
 
 function prepareQuestion(socket, game, res, playerData) {

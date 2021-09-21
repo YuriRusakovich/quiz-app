@@ -180,3 +180,130 @@
     color: red;
     margin-bottom: 10px;
 }
+
+.gridContainer {
+    display: grid;
+    width: fit-content;
+    overflow: hidden;
+    padding: 10px 0 32px;
+    margin: 10px auto;
+    font-family: Quicksand, arial, sans-serif;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05), 0 0 40px rgba(0, 0, 0, 0.08);
+    border-radius: 5px;
+    grid-template-columns: 80px 80px 80px 80px 80px 80px;
+    grid-template-rows: auto;
+    grid-template-areas:
+    "gameHeader gameHeader gameHeader gameHeader gameHeader gameHeader"
+    "gameNameTitle gameNameTitle gameTypeTitle gameTypeTitle gameLevelTitle gameLevelTitle"
+    "gameName gameName gameType gameType gameLevel gameLevel"
+    "gameDateTitle gameDateTitle gameDateTitle gameDateTitle gameDateTitle gameDateTitle"
+    "gameDate gameDate gameDate gameDate gameDate gameDate"
+    "usersHeader usersHeader usersHeader usersHeader usersHeader usersHeader"
+    "userNameTitle userNameTitle userNameTitle userScoreTitle userScoreTitle userScoreTitle"
+    "usersGridWrapper usersGridWrapper usersGridWrapper usersGridWrapper usersGridWrapper usersGridWrapper";
+}
+
+.usersGridWrapper {
+    grid-area: usersGridWrapper;
+}
+
+.usersGridContainer {
+    display: grid;
+    font-family: Quicksand, arial, sans-serif;
+    grid-template-columns: 80px 80px 80px 80px 80px 80px;
+    grid-template-rows: auto;
+    grid-template-areas:
+    "userName userName userName userScore userScore userScore";
+}
+
+.gameHeader {
+    grid-area: gameHeader;
+    justify-self: center;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.gameNameTitle {
+    grid-area: gameNameTitle;
+    justify-self: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.gameTypeTitle {
+    grid-area: gameTypeTitle;
+    justify-self: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.gameLevelTitle {
+    grid-area: gameLevelTitle;
+    justify-self: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.gameDateTitle {
+    grid-area: gameDateTitle;
+    justify-self: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.userNameTitle {
+    grid-area: userNameTitle;
+    justify-self: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.userScoreTitle {
+    grid-area: userScoreTitle;
+    justify-self: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.usersHeader {
+    grid-area: usersHeader;
+    justify-self: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.gameName {
+    grid-area: gameName;
+    justify-self: center;
+    margin-bottom: 10px;
+}
+
+.gameType {
+    grid-area: gameType;
+    justify-self: center;
+    margin-bottom: 10px;
+}
+
+.gameLevel {
+    grid-area: gameLevel;
+    justify-self: center;
+    margin-bottom: 10px;
+}
+
+.gameDate {
+    grid-area: gameDate;
+    justify-self: center;
+    margin-bottom: 10px;
+}
+
+.userName {
+    grid-area: userName;
+    justify-self: center;
+    margin-bottom: 10px;
+}
+
+.userScore {
+    grid-area: userScore;
+    justify-self: center;
+    margin-bottom: 10px;
+}
